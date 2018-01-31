@@ -10,7 +10,7 @@ namespace BookEditor.Data.Models
 	{
 		public long BookId { get; set; }
 		[Required]
-		[StringLength(30)]
+		[StringLength(30, ErrorMessage ="Заголовок может состоять не более, чем из 30 символов")]
 		public string Title { get; set; }
 		[Required]
 		[Range(1, 10000)]

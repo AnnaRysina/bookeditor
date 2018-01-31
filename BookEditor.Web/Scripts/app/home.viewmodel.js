@@ -212,10 +212,12 @@ function HomeViewModel(app, dataModel) {
 							error = res.modelState["book.ISBN"] + "\r\n";
 						if (!!res.modelState["book.Authors"])
 							error = error + res.modelState["book.Authors"] + "\r\n";
+						if (!!res.modelState["book.Title"])
+							error = error + res.modelState["book.Title"] + "\r\n";					
 						alert(error);
 					}
 					else {
-						var message = JSON.parse(data.responseText).message;
+						var message = res.message;
 						alert(message);
 					}
 				}
@@ -238,7 +240,14 @@ function HomeViewModel(app, dataModel) {
 	};
 
 	self.removeBook = function (book) {
+		if (self.goingUploadImage())
+			self.cancelUpload();
+		if (self.goingEditForm())
+			self.cancelEdit();
+
+		
 		if (confirm("Вы действительно хотите удалить книгу \"" + book.title() + "\"?")) {
+
 			$.ajax({
 				url: app.dataModel.booksUrl + "/" + book.bookId(),
 				type: "DELETE",
