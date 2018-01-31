@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace BookEditor.Web
 {
@@ -23,13 +20,13 @@ namespace BookEditor.Web
 				"~/Scripts/knockout.validation.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/libs").Include(
-				"~/Scripts/selecrPicker.js",
-				"~/Scripts/i18n/defaults-ru_RU.min.js",
-				"~/Scripts/toastr.min.js"));
-
-
-			bundles.Add(new ScriptBundle("~/bundles/app").Include(
 				"~/Scripts/sammy-{version}.js",
+				"~/Scripts/selecrPicker.js",
+				"~/Scripts/i18n/defaults-ru_RU.js",
+				"~/Scripts/toastr.js"));
+
+
+			bundles.Add(new ScriptBundle("~/bundles/app").Include(		
 				"~/Scripts/app/common.js",			
 				"~/Scripts/app/app.datamodel.js",
 				"~/Scripts/app/app.viewmodel.js",
@@ -42,14 +39,11 @@ namespace BookEditor.Web
 				"~/Scripts/modernizr-*"));
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-
 				"~/Scripts/bootstrap-select.js",
 				"~/Scripts/bootstrap.js",
 				"~/Scripts/respond.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
-				"~/Content/toastr.min.css",
-				 "~/Content/bootstrap-select.min.css",
 				 "~/Content/bootstrap.css",
 				 "~/Content/Site.css"));
 		}

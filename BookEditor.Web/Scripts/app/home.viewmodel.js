@@ -28,6 +28,7 @@ function Author(data) {
 
 function HomeViewModel(app, dataModel) {
 	var self = this;
+
 	self.books = ko.observableArray([]);
 	self.unchangeableBooks = [];
 	self.authors = ko.observableArray([]);
@@ -45,7 +46,8 @@ function HomeViewModel(app, dataModel) {
 		localStorage.setItem("sortedByPublishYear", sortedByPublishYear);
 		localStorage.setItem("ascendingSortOrder", ascendingSortOrder);
 	}
-	var sort = function (sortBy) {
+
+	function sort(sortBy) {
 		switch (sortBy) {
 			case "title":
 				self.books.sort(function (left, right) {
@@ -66,7 +68,8 @@ function HomeViewModel(app, dataModel) {
 		}
 		saveToStore(self.byNameSorted(), self.byPublishYearSorted(), self.ascendingSortOrder());
 	}
-	var restoreSortOrder = function () {
+
+	function restoreSortOrder() {
 		var name = localStorage.getItem("sortedByName");
 		var publishYear = localStorage.getItem("sortedByPublishYear");
 		var ascOrder = localStorage.getItem("ascendingSortOrder");
@@ -84,7 +87,7 @@ function HomeViewModel(app, dataModel) {
 		}
 	}
 
-	self.getLookUps = function () {
+	function getLookUps() {
 		$.getJSON(app.dataModel.getLookUps,
 			function (data) {
 				if (!!data.authors) {
@@ -100,19 +103,35 @@ function HomeViewModel(app, dataModel) {
 		);
 	}
 
-	self.getLookUps();
+	function refreshSelected(bookId) {
+		var book = self.unchangeableBooks.find(function (item) { return item.bookId === bookId; });
+		self.selectedBook().title(book.title);
+		self.selectedBook().authors(book.authors);
+		self.selectedBook().authorsNames(book.authorsNames);
+
+		self.selectedBook().numPages(book.numPages);
+		self.selectedBook().pubHouseId(book.pubHouseId);
+		self.selectedBook().pubHouseName(book.pubHouseName);
+
+		self.selectedBook().publishYear(book.publishYear);
+		self.selectedBook().isbn(book.isbn);
+
+	}
+
+	getLookUps();
 
 	self.selectBook = function (item) {
 		self.selectedBook(item);
 	}
+
 	self.getBooks = function () {
 		$.getJSON(app.dataModel.booksUrl,
-				function (allData) {
-					var mappedBooks = $.map(allData, function (item) { return new Book(item, self.pubHouses()) });
-					self.books(mappedBooks);
-					self.unchangeableBooks = allData;
-					restoreSortOrder();
-				}
+			function (allData) {
+				var mappedBooks = $.map(allData, function (item) { return new Book(item, self.pubHouses()) });
+				self.books(mappedBooks);
+				self.unchangeableBooks = allData;
+				restoreSortOrder();
+			}
 		);
 	}
 
@@ -143,7 +162,6 @@ function HomeViewModel(app, dataModel) {
 		var fileSelect = document.getElementById("inputFile");
 		var file = fileSelect.files[0];
 		if (!!file && (file.type.match("image.jpeg"))) {
-			debugger;
 			formData.append("illustration", file, file.name);
 			$.ajax({
 				url: app.dataModel.bookImgUploadUrl + "/" + item.bookId(),
@@ -206,17 +224,16 @@ function HomeViewModel(app, dataModel) {
 	};
 
 	self.sortBooks = function (sortBy, data) {
-		debugger;
 		if (sortBy === "title")
 			if (self.byNameSorted())
 				self.ascendingSortOrder(!self.ascendingSortOrder());
-			else
-				(self.ascendingSortOrder(true));
+			else 
+			(self.ascendingSortOrder(true));
 		if (sortBy === "publishYear")
 			if (self.byPublishYearSorted())
 				self.ascendingSortOrder(!self.ascendingSortOrder());
 			else 
-				(self.ascendingSortOrder(true));
+			(self.ascendingSortOrder(true));
 		sort(sortBy);
 	};
 
@@ -235,21 +252,6 @@ function HomeViewModel(app, dataModel) {
 				}
 			});
 		}
-	}
-
-	var refreshSelected = function (bookId) {
-		var book = self.unchangeableBooks.find(function (item) { return item.bookId === bookId; });
-		self.selectedBook().title(book.title);
-		self.selectedBook().authors(book.authors);
-		self.selectedBook().authorsNames(book.authorsNames);
-
-		self.selectedBook().numPages(book.numPages);
-		self.selectedBook().pubHouseId(book.pubHouseId);
-		self.selectedBook().pubHouseName(book.pubHouseName);
-
-		self.selectedBook().publishYear(book.publishYear);
-		self.selectedBook().isbn(book.isbn);
-
 	}
 
 	self.cancelEdit = function (item) {

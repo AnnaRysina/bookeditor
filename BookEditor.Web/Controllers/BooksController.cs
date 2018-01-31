@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using BookEditor.Data.Contracts;
 using BookEditor.Data.Models;
-using BookEditor.Data.Repositories;
 
 
 namespace BookEditor.Web.Controllers
@@ -122,7 +121,6 @@ namespace BookEditor.Web.Controllers
 				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
 			}
 		}
-
 	}
 }
 
